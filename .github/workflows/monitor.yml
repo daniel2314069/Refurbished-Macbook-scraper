@@ -1,0 +1,62 @@
+name: 監控 MacBook Air M5 整修品
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      send_test_notification:
+        description: "只傳送 Discord 測試通知"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apple-refurbished-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+    steps:
+      - name: 取得程式碼
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 設定 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 安裝套件
+        run: python -m pip install -r requirements.txt
+
+      - name: 傳送測試通知
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.send_test_notification }}
+        run: python monitor.py --test-notification
+
+      - name: 檢查 Apple 整修品
+        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.send_test_notification }}
+        run: python monitor.py
+
+      - name: 儲存監控狀態
+        if: ${{ success() && (github.event_name != 'workflow_dispatch' || !inputs.send_test_notification) }}
+        shell: bash
+        run: |
+          if git diff --quiet -- state.json; then
+            echo "監控狀態沒有變化"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          git commit -m "chore: update refurbished monitor state"
+          git push
