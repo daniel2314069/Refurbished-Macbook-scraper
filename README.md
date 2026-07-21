@@ -87,3 +87,21 @@ Remove-Item Env:DISCORD_WEBHOOK_URL
 - 如果 Actions 顯示未設定 `DISCORD_WEBHOOK_URL`，請重新檢查第三步的 Secret 名稱，大小寫必須完全相同。
 - 如果 Discord 回傳 401 或 404，通常代表 Webhook 已被刪除或網址不完整，請重新建立並更新 Secret。
 - 若不再需要監控，可在 GitHub repository 的 **Actions** 頁面停用 workflow，或直接刪除 repository。
+
+## Windows 本機每分鐘監控
+
+本機監控使用 Windows 工作排程器，每分鐘檢查一次。電腦從睡眠喚醒後，會在下一個週期自動恢復，並啟用「錯過排程後儘快執行」。電腦關機或仍在睡眠時無法檢查。
+
+首次設定時，在 PowerShell 執行：
+
+```powershell
+.\setup_windows_task.ps1
+```
+
+依提示貼上 Discord Webhook URL。網址會以目前 Windows 使用者的加密金鑰保存於 `.local`，不會提交到 Git。設定程序會先傳送測試通知，成功後才建立排程。
+
+執行紀錄位於 `logs\monitor.log`。若要移除排程：
+
+```powershell
+Unregister-ScheduledTask -TaskName "Apple Refurbished Monitor" -Confirm:$false
+```
