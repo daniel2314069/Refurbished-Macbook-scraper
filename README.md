@@ -92,6 +92,8 @@ Remove-Item Env:DISCORD_WEBHOOK_URL
 
 本機監控使用 Windows 工作排程器，每分鐘檢查一次。電腦從睡眠喚醒後，會在下一個週期自動恢復，並啟用「錯過排程後儘快執行」。電腦關機或仍在睡眠時無法檢查。
 
+排程透過 Windows Script Host 在背景隱藏執行，不會每分鐘開啟或閃爍 PowerShell 視窗。
+
 首次設定時，在 PowerShell 執行：
 
 ```powershell

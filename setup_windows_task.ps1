@@ -8,6 +8,7 @@ $projectRoot = $PSScriptRoot
 $pythonPath = Join-Path $projectRoot ".venv\Scripts\python.exe"
 $monitorPath = Join-Path $projectRoot "monitor.py"
 $runnerPath = Join-Path $projectRoot "run_local_monitor.ps1"
+$hiddenRunnerPath = Join-Path $projectRoot "run_local_monitor_hidden.vbs"
 $localDirectory = Join-Path $projectRoot ".local"
 $secretPath = Join-Path $localDirectory "discord-webhook.xml"
 $taskName = "Apple Refurbished Monitor"
@@ -45,9 +46,9 @@ if (-not $SkipNotificationTest) {
     }
 }
 
-$powerShellPath = Join-Path $PSHOME "powershell.exe"
-$arguments = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File `"$runnerPath`""
-$action = New-ScheduledTaskAction -Execute $powerShellPath -Argument $arguments -WorkingDirectory $projectRoot
+$wscriptPath = Join-Path $env:SystemRoot "System32\wscript.exe"
+$arguments = "`"$hiddenRunnerPath`""
+$action = New-ScheduledTaskAction -Execute $wscriptPath -Argument $arguments -WorkingDirectory $projectRoot
 $trigger = New-ScheduledTaskTrigger `
     -Once `
     -At ((Get-Date).AddMinutes(1)) `
