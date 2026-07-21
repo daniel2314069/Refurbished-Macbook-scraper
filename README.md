@@ -54,9 +54,9 @@ Public repository 中的程式碼會公開，但 Discord Webhook 不會放在程
 
 ## 第五步：啟用監控
 
-程式推上 GitHub 後，排程會自動啟用，每 5 分鐘執行一次。你也可以在 Actions 頁面手動執行，並取消勾選測試通知，立即檢查 Apple 頁面。
+GitHub Actions 的定時排程已停用，避免與 Windows 本機監控重複通知。你仍可以在 Actions 頁面手動執行，並取消勾選測試通知，立即檢查 Apple 頁面。
 
-GitHub 排程在繁忙時可能延遲幾分鐘，這是 GitHub Actions 的正常行為。公開 repository 若被 fork，fork 版本的排程預設不會自動啟用。
+GitHub workflow 保留作為手動測試與備援，不會自行定時執行。
 
 ## 本機測試（選用）
 

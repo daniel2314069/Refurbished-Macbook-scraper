@@ -1,8 +1,6 @@
 name: 監控 MacBook Air M5 整修品
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       send_test_notification:
