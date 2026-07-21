@@ -1,4 +1,11 @@
 {
-  "active_product_ids": [],
-  "last_heartbeat": "2026-07-14T08:43:33Z"
+  "active_product_ids": [
+    "fdv94ta",
+    "fdva4ta",
+    "fdvd4ta",
+    "fdvh4ta",
+    "fdvq4ta",
+    "fdvt4ta"
+  ],
+  "last_heartbeat": "2026-07-21T08:47:54Z"
 }
